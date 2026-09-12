@@ -1,4 +1,0 @@
----
-requirements_file: "{{ playbook_dir }}/requirements.txt"
-requirements_remote_file: /tmp/exam-fanap-requirements.txt
-requirements_pip_executable: /usr/bin/pip3

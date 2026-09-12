@@ -28,6 +28,17 @@
     group: grafana
     mode: "0755"
 
+- name: Create Grafana dashboard provisioning directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: grafana
+    mode: "0755"
+  loop:
+    - /etc/grafana/provisioning/dashboards
+    - /var/lib/grafana/dashboards
+
 - name: Configure Prometheus datasource
   ansible.builtin.template:
     src: prometheus-datasource.yml.j2
@@ -35,6 +46,24 @@
     owner: root
     group: grafana
     mode: "0640"
+  notify: Restart grafana-server
+
+- name: Configure dashboard provisioning
+  ansible.builtin.template:
+    src: dashboards.yml.j2
+    dest: /etc/grafana/provisioning/dashboards/monitoring.yml
+    owner: root
+    group: grafana
+    mode: "0640"
+  notify: Restart grafana-server
+
+- name: Install Node Exporter dashboard
+  ansible.builtin.template:
+    src: node-exporter-dashboard.json.j2
+    dest: /var/lib/grafana/dashboards/node-exporter.json
+    owner: root
+    group: grafana
+    mode: "0644"
   notify: Restart grafana-server
 
 - name: Enable and start Grafana

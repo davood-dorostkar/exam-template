@@ -2,5 +2,5 @@
 monitoring:
   hosts:
     node-1:
-      ansible_host: 192.168.50.11
-      ansible_user: vagrant
+      ansible_host: 95.38.165.179
+      ansible_user: root
