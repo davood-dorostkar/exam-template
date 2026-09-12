@@ -33,10 +33,9 @@ The playbook uses the inventory, group variables, and roles to configure the mon
 
 The monitoring roles run in this order:
 
-1. `requirements`
-2. `node_exporter`
-3. `prometheus`
-4. `grafana`
+1. `node_exporter`
+2. `prometheus`
+3. `grafana`
 
 ## Inventory and variables
 
@@ -51,7 +50,6 @@ Monitoring ports are defined in [`inventory/group_vars/monitoring.yml`](./invent
 
 ## Roles
 
-- **requirements** copies `requirements.txt` to the target host and installs it with `pip3`.
 - **node_exporter** installs Node Exporter as a systemd service and exposes host metrics.
 - **prometheus** installs Prometheus and configures it to scrape Prometheus and Node Exporter.
 - **grafana** installs Grafana, configures Prometheus as its default datasource, and provisions a dashboard with CPU and memory panels.
@@ -72,11 +70,13 @@ ansible-playbook -i inventory main.yml --ask-vault-pass
 To inspect or update the encrypted variables:
 
 ```bash
-ansible-vault view inventory/group_vars/all/vault.yml
-ansible-vault edit inventory/group_vars/all/vault.yml
+ansible-vault create inventory/group_vars/all/vault.yml
 ```
 
-Do not commit plaintext secrets or the vault password to the repository.
+Then added the secret:
+```yaml
+grafana_admin_password: "xxxxxx"
+```
 
 ## Running the project
 
@@ -95,7 +95,7 @@ ansible-playbook -i inventory main.yml -b --ask-vault-pass
 ```
 >The pass is `lab123`
 
-grafana pass is `lab123`
+>grafana pass is `lab123`
 
 # Challenges
 
