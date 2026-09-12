@@ -129,7 +129,7 @@ sudo apt install docker-compose
 
 ---
 
-## Application Troubleshooting
+## Problem 3: Application Troubleshooting
 
 ### Nginx 502 Bad Gateway Error
 
