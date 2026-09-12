@@ -1,0 +1,44 @@
+---
+- name: Download Grafana package
+  ansible.builtin.get_url:
+    url: "{{ grafana_deb_url }}"
+    dest: "/tmp/grafana-enterprise_{{ grafana_version }}_{{ grafana_apt_architecture }}.deb"
+    mode: "0644"
+
+- name: Install Grafana package
+  ansible.builtin.apt:
+    deb: "/tmp/grafana-enterprise_{{ grafana_version }}_{{ grafana_apt_architecture }}.deb"
+    state: present
+    update_cache: true
+  notify: Restart grafana-server
+
+- name: Configure Grafana port
+  ansible.builtin.lineinfile:
+    path: /etc/grafana/grafana.ini
+    regexp: "^;?http_port ="
+    line: "http_port = {{ grafana_port }}"
+    insertafter: '^\[server\]'
+  notify: Restart grafana-server
+
+- name: Create Grafana datasource provisioning directory
+  ansible.builtin.file:
+    path: /etc/grafana/provisioning/datasources
+    state: directory
+    owner: root
+    group: grafana
+    mode: "0755"
+
+- name: Configure Prometheus datasource
+  ansible.builtin.template:
+    src: prometheus-datasource.yml.j2
+    dest: /etc/grafana/provisioning/datasources/prometheus.yml
+    owner: root
+    group: grafana
+    mode: "0640"
+  notify: Restart grafana-server
+
+- name: Enable and start Grafana
+  ansible.builtin.service:
+    name: grafana-server
+    state: started
+    enabled: true
