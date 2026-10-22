@@ -1,0 +1,5 @@
+---
+# Install Monitoring. It must listen .
+# Add Prometheus as a datasource.
+# Add one dashboard with CPU and memory.
+[]

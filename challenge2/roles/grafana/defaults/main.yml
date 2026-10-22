@@ -1,0 +1,9 @@
+---
+grafana_version: "11.2.0"
+grafana_port: 3000
+grafana_apt_architecture_map:
+  x86_64: amd64
+  aarch64: arm64
+grafana_apt_architecture: "{{ grafana_apt_architecture_map[ansible_architecture] | default('amd64') }}"
+grafana_deb_url: "https://dl.grafana.com/enterprise/release/grafana-enterprise_{{ grafana_version }}_{{ grafana_apt_architecture }}.deb"
+grafana_prometheus_url: "http://127.0.0.1:{{ prometheus_port | default(9090) }}"
